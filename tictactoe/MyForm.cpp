@@ -10,6 +10,4 @@ void Main(array<String^>^ args) {
     //WinformCDemo is your project name
     tictactoe::MyForm form;
     Application::Run(% form);
-//test
 }
-
