@@ -123,6 +123,7 @@ namespace tictactoe {
 			this->label5->Size = System::Drawing::Size(287, 55);
 			this->label5->TabIndex = 1;
 			this->label5->Text = L"Tic Tac Toe";
+			this->label5->Click += gcnew System::EventHandler(this, &MyForm::label5_Click);
 			// 
 			// panel2
 			// 
@@ -166,6 +167,7 @@ namespace tictactoe {
 			this->button11->TabIndex = 4;
 			this->button11->Text = L"New Game";
 			this->button11->UseVisualStyleBackColor = false;
+			this->button11->Click += gcnew System::EventHandler(this, &MyForm::button11_Click);
 			// 
 			// button10
 			// 
@@ -178,6 +180,7 @@ namespace tictactoe {
 			this->button10->TabIndex = 3;
 			this->button10->Text = L"Reset";
 			this->button10->UseVisualStyleBackColor = false;
+			this->button10->Click += gcnew System::EventHandler(this, &MyForm::button10_Click);
 			// 
 			// panel5
 			// 
@@ -202,6 +205,7 @@ namespace tictactoe {
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(142, 45);
 			this->label4->TabIndex = 3;
+			this->label4->Click += gcnew System::EventHandler(this, &MyForm::label4_Click);
 			// 
 			// label3
 			// 
@@ -213,6 +217,7 @@ namespace tictactoe {
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(142, 45);
 			this->label3->TabIndex = 2;
+			this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
 			// 
 			// label2
 			// 
@@ -384,12 +389,16 @@ namespace tictactoe {
 
 		}
 		Boolean checker;  //TO CHECK IF IS THE TURN OF PLAYER OR "AI"
+		Boolean firstround=true;
+		int draw=0;
+		int playerscore=0;
+		int AIscore = 0;
 
 		
 #pragma endregion
 		int fill_matrix(int matrix[3][3]) {          // need to make it global and just add values to it
 			if (b1->Text == "X") matrix[0][0] = 1;
-			if (b1->Text == "0") matrix[0][0] = 10;
+			if (b1->Text == "O") matrix[0][0] = 10;
 			if (button2->Text == "X") matrix[0][1] = 1;
 			if (button2->Text == "O") matrix[0][1] = 10;
 			if (button3->Text == "X") matrix[0][2] = 1;
@@ -410,6 +419,402 @@ namespace tictactoe {
 
 		}
 
+		void Reset() {
+			label5->Text = "Tic Tac Toe";
+			label5->BackColor = System::Drawing::Color::Silver;
+			checker = false;
+			firstround = true;
+			b1->Enabled = true;
+			button2->Enabled = true;
+			button3->Enabled = true;
+			button4->Enabled = true;
+			button5->Enabled = true;
+			button6->Enabled = true;
+			button7->Enabled = true;
+			button8->Enabled = true;
+			button9->Enabled = true;
+			b1->Text = "";
+			button2->Text = "";
+			button3->Text = "";
+			button4->Text = "";
+			button5->Text = "";
+			button6->Text = "";
+			button7->Text = "";
+			button8->Text = "";
+			button9->Text = "";
+			draw = 0;
+			b1->BackColor = System::Drawing::Color::White;
+			button2->BackColor = System::Drawing::Color::White;
+			button3->BackColor = System::Drawing::Color::White;
+			button4->BackColor = System::Drawing::Color::White;
+			button5->BackColor = System::Drawing::Color::White;
+			button6->BackColor = System::Drawing::Color::White;
+			button7->BackColor = System::Drawing::Color::White;
+			button8->BackColor = System::Drawing::Color::White;
+			button9->BackColor = System::Drawing::Color::White;
+
+		}
+
+		int can_AI_win(int matrix[3][3])
+		{
+			if (matrix[0][0] + matrix[0][1] + matrix[0][2] == 20) {
+				if (matrix[0][0] == 0 && b1->Enabled == true) {
+					b1->Text = "O";
+					checker = false;
+					b1->Enabled = false;
+				}
+				if (matrix[0][1] == 0 && button2->Enabled == true) {
+					button2->Text = "O";
+					checker = false;
+					button2->Enabled = false;
+				}
+				if (matrix[0][2] == 0 && button3->Enabled == true) {
+					button3->Text = "O";
+					checker = false;
+					button3->Enabled = false;
+				}
+				b1->BackColor = System::Drawing::Color::Red;
+				button2->BackColor = System::Drawing::Color::Red;
+				button3->BackColor = System::Drawing::Color::Red;
+				label5->BackColor = System::Drawing::Color::Red;
+				label5->Text = "AI WON";
+				AIscore++;
+				Enable_False();
+			}
+			if (matrix[1][0] + matrix[1][1] + matrix[1][2] == 20) {
+				if (matrix[1][0] == 0 && button4->Enabled == true) {
+					button4->Text = "O";
+					checker = false;
+					button4->Enabled = false;
+				}
+				if (matrix[1][1] == 0 && button5->Enabled == true) {
+					button5->Text = "O";
+					checker = false;
+					button5->Enabled = false;
+				}
+				if (matrix[1][2] == 0 && button6->Enabled == true) {
+					button6->Text = "O";
+					checker = false;
+					button6->Enabled = false;
+				}
+				button4->BackColor = System::Drawing::Color::Red;
+				button5->BackColor = System::Drawing::Color::Red;
+				button6->BackColor = System::Drawing::Color::Red;
+				label5->BackColor = System::Drawing::Color::Red;
+				label5->Text = "AI WON";
+				AIscore++;
+				Enable_False();
+			}
+			if (matrix[2][0] + matrix[2][1] + matrix[2][2] == 20) {
+				if (matrix[2][0] == 0 && button7->Enabled == true) {
+					button7->Text = "O";
+					checker = false;
+					button7->Enabled = false;
+				}
+				if (matrix[2][1] == 0 && button8->Enabled == true) {
+					button8->Text = "O";
+					checker = false;
+					button8->Enabled = false;
+				}
+				if (matrix[2][2] == 0 && button9->Enabled == true) {
+					button9->Text = "O";
+					checker = false;
+					button9->Enabled = false;
+				}
+				button7->BackColor = System::Drawing::Color::Red;
+				button8->BackColor = System::Drawing::Color::Red;
+				button9->BackColor = System::Drawing::Color::Red;
+				label5->BackColor = System::Drawing::Color::Red;
+				label5->Text = "AI WON";
+				AIscore++;
+				Enable_False();
+			}
+			if (matrix[0][0] + matrix[1][0] + matrix[2][0] == 20) {
+				if (matrix[0][0] == 0 && b1->Enabled == true) {
+					b1->Text = "O";
+					checker = false;
+					b1->Enabled = false;
+				}
+				if (matrix[1][0] == 0 && button4->Enabled == true) {
+					button4->Text = "O";
+					checker = false;
+					button4->Enabled = false;
+				}
+				if (matrix[2][0] == 0 && button7->Enabled == true) {
+					button7->Text = "O";
+					checker = false;
+					button7->Enabled = false;
+				}
+				b1->BackColor = System::Drawing::Color::Red;
+				button4->BackColor = System::Drawing::Color::Red;
+				button7->BackColor = System::Drawing::Color::Red;
+				label5->BackColor = System::Drawing::Color::Red;
+				label5->Text = "AI WON";
+				AIscore++;
+				Enable_False();
+			}
+
+				if (matrix[0][1] + matrix[1][1] + matrix[2][1] == 20) {
+					if (matrix[0][1] == 0 && button2->Enabled == true) {
+						button2->Text = "O";
+						checker = false;
+						button2->Enabled = false;
+					}
+					if (matrix[1][1] == 0 && button5->Enabled == true) {
+						button5->Text = "O";
+						checker = false;
+						button5->Enabled = false;
+					}
+					if (matrix[2][1] == 0 && button8->Enabled == true) {
+						button8->Text = "O";
+						checker = false;
+						button8->Enabled = false;
+					}
+					button2->BackColor = System::Drawing::Color::Red;
+					button5->BackColor = System::Drawing::Color::Red;
+					button8->BackColor = System::Drawing::Color::Red;
+					label5->BackColor = System::Drawing::Color::Red;
+					label5->Text = "AI WON";
+					AIscore++;
+					Enable_False();
+				}
+				if (matrix[0][2] + matrix[1][2] + matrix[2][2] == 20) {
+					if (matrix[0][2] == 0 && button3->Enabled == true) {
+						button3->Text = "O";
+						checker = false;
+						button3->Enabled = false;
+					}
+					if (matrix[1][2] == 0 && button6->Enabled == true) {
+						button6->Text = "O";
+						checker = false;
+						button6->Enabled = false;
+					}
+					if (matrix[2][2] == 0 && button9->Enabled == true) {
+						button9->Text = "O";
+						checker = false;
+						button9->Enabled = false;
+					}
+					button3->BackColor = System::Drawing::Color::Red;
+					button6->BackColor = System::Drawing::Color::Red;
+					button9->BackColor = System::Drawing::Color::Red;
+					label5->BackColor = System::Drawing::Color::Red;
+					label5->Text = "AI WON";
+					AIscore++;
+					Enable_False();
+				}
+				if (matrix[0][0] + matrix[1][1] + matrix[2][2] == 20) {
+					if (matrix[0][0] == 0 && b1->Enabled == true) {
+						b1->Text = "O";
+						checker = false;
+						b1->Enabled = false;
+					}
+					if (matrix[1][1] == 0 && button5->Enabled == true) {
+						button5->Text = "O";
+						checker = false;
+						button5->Enabled = false;
+					}
+					if (matrix[2][2] == 0 && button9->Enabled == true) {
+						button9->Text = "O";
+						checker = false;
+						button9->Enabled = false;
+					}
+					b1->BackColor = System::Drawing::Color::Red;
+					button5->BackColor = System::Drawing::Color::Red;
+					button9->BackColor = System::Drawing::Color::Red;
+					label5->BackColor = System::Drawing::Color::Red;
+					label5->Text = "AI WON";
+					AIscore++;
+					Enable_False();
+				}
+				if (matrix[0][2] + matrix[1][1] + matrix[2][0] == 20) {
+					if (matrix[0][2] == 0 && button3->Enabled == true) {
+						button3->Text = "O";
+						checker = false;
+						button3->Enabled = false;
+					}
+					if (matrix[1][1] == 0 && button5->Enabled == true) {
+						button5->Text = "O";
+						checker = false;
+						button5->Enabled = false;
+					}
+					if (matrix[2][0] == 0 && button7->Enabled == true) {
+						button7->Text = "O";
+						checker = false;
+						button7->Enabled = false;
+					}
+					button3->BackColor = System::Drawing::Color::Red;
+					button5->BackColor = System::Drawing::Color::Red;
+					button7->BackColor = System::Drawing::Color::Red;
+					label5->BackColor = System::Drawing::Color::Red;
+					label5->Text = "AI WON";
+					AIscore++;
+					Enable_False();
+				}
+				int test;
+				test = AIscore;
+				label3->Text = Convert::ToString(test);
+
+			return matrix[3][3];
+		}
+
+		
+		int did_player_win(int matrix[3][3])
+		{
+			if (matrix[0][0] + matrix[0][1] + matrix[0][2] == 3)
+			{
+				b1->BackColor = System::Drawing::Color::Green;
+				button2->BackColor = System::Drawing::Color::Green;
+				button3->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[1][0] + matrix[1][1] + matrix[1][2] == 3)
+			{
+				button4->BackColor = System::Drawing::Color::Green;
+				button5->BackColor = System::Drawing::Color::Green;
+				button6->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[2][0] + matrix[2][1] + matrix[2][2] == 3)
+			{
+				button7->BackColor = System::Drawing::Color::Green;
+				button8->BackColor = System::Drawing::Color::Green;
+				button9->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[1][0] + matrix[2][0] + matrix[0][0] == 3)
+			{
+				button6->BackColor = System::Drawing::Color::Green;
+				button7->BackColor = System::Drawing::Color::Green;
+				b1->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[0][1] + matrix[1][1] + matrix[2][1] == 3)
+			{
+				button2->BackColor = System::Drawing::Color::Green;
+				button5->BackColor = System::Drawing::Color::Green;
+				button8->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[0][2] + matrix[1][2] + matrix[2][2] == 3)
+			{
+				button3->BackColor = System::Drawing::Color::Green;
+				button6->BackColor = System::Drawing::Color::Green;
+				button9->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[0][0] + matrix[1][1] + matrix[2][2] == 3)
+			{
+				b1->BackColor = System::Drawing::Color::Green;
+				button5->BackColor = System::Drawing::Color::Green;
+				button9->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+
+			if (matrix[0][2] + matrix[1][1] + matrix[2][0] == 3)
+			{
+				button3->BackColor = System::Drawing::Color::Green;
+				button5->BackColor = System::Drawing::Color::Green;
+				button7->BackColor = System::Drawing::Color::Green;
+				label5->BackColor = System::Drawing::Color::Green;
+				label5->Text = "Player WON";
+				playerscore++;
+				checker = false;
+				Enable_False();
+			}
+			int test;
+			test = playerscore;
+			label4->Text = Convert::ToString(test);
+			return matrix[3][3];
+
+		}
+
+		int fill_matrixO(int matrix[3][3]) {                        //failed to make a button array so this is the solution
+			if (matrix[0][0] == 10 && b1->Enabled == true) {
+				b1->Text = "O";
+				b1->Enabled = false;
+			}
+			if (matrix[0][1] == 10 && button2->Enabled == true)
+			{
+				button2->Text = "O";
+				button2->Enabled = false;
+			}
+			if (matrix[0][2] == 10 && button3->Enabled == true)
+			{
+				button3->Text = "O";
+				button3->Enabled = false;
+			}
+			if (matrix[1][0] == 10 && button4->Enabled == true)
+			{
+				button4->Text = "O";
+				button4->Enabled = false;
+			}
+			if (matrix[1][1] == 10 && button5->Enabled == true)
+			{
+				button5->Text = "O";
+				button5->Enabled = false;
+			}
+			if (matrix[1][2] == 10 && button6->Enabled == true)
+			{
+				button6->Text = "O";
+				button6->Enabled = false;
+			}
+			if (matrix[2][0] == 10 && button7->Enabled == true)
+			{
+				button7->Text = "O";
+				button7->Enabled = false;
+			}
+
+			if (matrix[2][1] == 10 && button8->Enabled == true)
+			{
+				button8->Text = "O";
+				button8->Enabled = false;
+			}
+			if (matrix[2][2] == 10 && button9->Enabled == true)
+			{
+			button9->Text = "O";
+			button9->Enabled = false;
+			}
+
+			checker = false;
+			return matrix[3][3];
+
+		}
+
+
 		void Enable_False()
 		{
 			b1->Enabled = false;
@@ -429,169 +834,235 @@ namespace tictactoe {
 							     {0,0,0}
 			};
 
+			
+
 			fill_matrix(matrix);
+			did_player_win(matrix);
+
+			if (checker == true) {
+				can_AI_win(matrix);
+			}
 			
 			//if(checker= true && ())
 
 
-			if (checker == true && b1->Text == "X" && button5->Enabled==true) {
+			if (checker == true && b1->Text == "X" && button5->Enabled==true && firstround == true) {
 	
 				button5->Text = "O";
 				checker = false;
 				button5->Enabled = false;
+				firstround = false;
 
 
 			}
-			if (checker == true && button3->Text == "X" && button5->Enabled == true) {
+			if (checker == true && button3->Text == "X" && button5->Enabled == true && firstround == true) {
 				button5->Text = "O";
 				checker = false;
 				button5->Enabled = false;
+				firstround = false;
 
 
 			}
-			if (checker == true && button7->Text == "X" && button5->Enabled == true) {
+			if (checker == true && button7->Text == "X" && button5->Enabled == true && firstround == true) {
 
 				button5->Text = "O";
 				checker = false;
 				button5->Enabled = false;
+				firstround = false;
 
 
 			}
-			if (checker == true && button9->Text == "X" && button5->Enabled == true) {
+			if (checker == true && button9->Text == "X" && button5->Enabled == true && firstround == true) {
 				button5->Text = "O";
 				checker = false;
 				button5->Enabled = false;
+				firstround = false;
 
 
 			}
+
+			//if (checker  == true && )
 
 			if (checker == true && matrix[2][0] +matrix[2][1]+matrix[2][2]==2) {
-				if (matrix[2][0] == 0) {
+				if (matrix[2][0] == 0 && button7->Enabled == true) {
 					button7->Text = "O";
 					checker = false;
 					button7->Enabled = false;
 				}
-				if (matrix[2][1] == 0) {
+				if (matrix[2][1] == 0 && button8->Enabled == true) {
 					button8->Text = "O";
 					checker = false;
 					button8->Enabled = false;
 				}
-				if (matrix[2][2] == 0) {
+				if (matrix[2][2] == 0 && button9->Enabled == true) {
 					button9->Text = "O";
 					checker = false;
 					button9->Enabled = false;
 				}
 			}
 			if (checker == true && matrix[1][0] + matrix[1][1] + matrix[1][2] == 2) {
-				if (matrix[1][0] == 0) {
+				if (matrix[1][0] == 0 && button4->Enabled == true) {
 					button4->Text = "O";
 					checker = false;
 					button4->Enabled = false;
 				}
-				if (matrix[1][1] == 0) {
+				if (matrix[1][1] == 0 && button5->Enabled == true) {
 					button5->Text = "O";
 					checker = false;
 					button5->Enabled = false;
 				}
-				if (matrix[1][2] == 0) {
+				if (matrix[1][2] == 0 && button6->Enabled == true) {
 					button6->Text = "O";
 					checker = false;
 					button6->Enabled = false;
 				}
 			}
 			if (checker == true && matrix[0][0] + matrix[0][1] + matrix[0][2] == 2) {
-				if (matrix[0][0] == 0 ) {
+				if (matrix[0][0] == 0 && b1->Enabled == true) {
 					b1->Text = "O";
 					checker = false;
 					b1->Enabled = false;
 				}
-				if (matrix[0][1] == 0 ) {
+				if (matrix[0][1] == 0 && button2->Enabled == true) {
 					button2->Text = "O";
 					checker = false;
 					button2->Enabled = false;
 				}
-				if (matrix[0][2] == 0) {
+				if (matrix[0][2] == 0 && button2->Enabled == true) {
 					button2->Text = "O";
 					checker = false;
 					button2->Enabled = false;
 				}
 			}
 			if (checker == true && matrix[0][0] + matrix[1][0] + matrix[2][0] == 2) {
-				if (matrix[0][0] == 0) {
+				if (matrix[0][0] == 0 && b1->Enabled == true) {
 					b1->Text = "O";
 					checker = false;
 					b1->Enabled = false;
 				}
-				if (matrix[1][0] == 0) {
-					button3->Text = "O";
+				if (matrix[1][0] == 0 && button4->Enabled == true) {
+					button4->Text = "O";
 					checker = false;
-					button3->Enabled = false;
+					button4->Enabled = false;
 				}
-				if (matrix[2][0] == 0) {
+				if (matrix[2][0] == 0 && button7->Enabled == true) {
 					button7->Text = "O";
 					checker = false;
 					button7->Enabled = false;
 				}
 			}
 			if (checker == true && matrix[0][1] + matrix[1][1] + matrix[2][1] == 2) {
-				if (matrix[0][1] == 0) {
+				if (matrix[0][1] == 0 && button2->Enabled == true) {
 					button2->Text = "O";
 					checker = false;
 					button2->Enabled = false;
 				}
-				if (matrix[1][1] == 0) {
-					button4->Text = "O";
+				if (matrix[1][1] == 0 && button5->Enabled == true) {
+					button5->Text = "O";
 					checker = false;
-					button4->Enabled = false;
+					button5->Enabled = false;
 				}
-				if (matrix[2][1] == 0) {
+				if (matrix[2][1] == 0 && button8->Enabled == true) {
 					button8->Text = "O";
 					checker = false;
 					button8->Enabled = false;
 				}
 			}
 			if (checker == true && matrix[0][2] + matrix[1][2] + matrix[2][2] == 2) {
-				if (matrix[0][2] == 0) {
+				if (matrix[0][2] == 0 && button3->Enabled == true) {
 					button3->Text = "O";
 					checker = false;
 					button3->Enabled = false;
 				}
-				if (matrix[1][2] == 0) {
+				if (matrix[1][2] == 0 && button6->Enabled == true) {
 					button6->Text = "O";
 					checker = false;
 					button6->Enabled = false;
 				}
-				if (matrix[2][2] == 0) {
+				if (matrix[2][2] == 0 && button9->Enabled == true) {
 					button9->Text = "O";
 					checker = false;
 					button9->Enabled = false;
 				}
 			}
 			if (checker == true && matrix[0][0] + matrix[1][1] + matrix[2][2] == 2) {
-				if (matrix[0][0] == 0) {
+				if (matrix[0][0] == 0 && b1->Enabled == true) {
 					b1->Text = "O";
 					checker = false;
 					b1->Enabled = false;
 				}
-				if (matrix[1][1] == 0) {
+				if (matrix[1][1] == 0 && button5->Enabled == true) {
 					button5->Text = "O";
 					checker = false;
 					button5->Enabled = false;
 				}
-				if (matrix[2][2] == 0) {
+				if (matrix[2][2] == 0 && button9->Enabled == true) {
 					button9->Text = "O";
 					checker = false;
 					button9->Enabled = false;
 				}
 			}
+
+			if (checker == true && matrix[2][0] + matrix[1][1] + matrix[0][2] == 2) {
+				if (matrix[2][0] == 0 && button7->Enabled == true) {
+					button7->Text = "O";
+					checker = false;
+					button7->Enabled = false;
+				}
+				if (matrix[1][1] == 0 && button5->Enabled == true) {
+					button5->Text = "O";
+					checker = false;
+					button5->Enabled = false;
+				}
+				if (matrix[0][2] == 0 && button3->Enabled == true) {
+					button3->Text = "O";
+					checker = false;
+					button3->Enabled = false;
+				}
+			}
+
+
 			if (checker == true && matrix[0][1] == 1 || matrix[1][0] == 1 || matrix[2][1] == 1 || matrix[1][2] == 1 || matrix[1][1] == 1) {
 
-				if (b1->Enabled == true && checker == true && b1->Enabled == true) {
+				if (matrix[2][1] == 1 && matrix[1][0] == 1 && button5->Enabled==true) {
+
+					button5->Text = "O";
+					checker = false;
+					button5->Enabled = false;
+
+				}
+
+				if (matrix[1][2] == 1 && matrix[2][1] == 1 && button5->Enabled == true) {
+
+					button5->Text = "O";
+					checker = false;
+					button5->Enabled = false;
+
+				}
+
+
+				if (matrix[0][1] == 1 && matrix[1][0] == 1 && button5->Enabled == true) {
+
+					button5->Text = "O";
+					checker = false;
+					button5->Enabled = false;
+
+				}
+
+				if (matrix[1][2] == 1 && matrix[0][1] == 1 && button5->Enabled == true) {
+
+					button5->Text = "O";
+					checker = false;
+					button5->Enabled = false;
+
+				}
+
+				if (b1->Enabled == true && checker == true && b1->Enabled == true && matrix[0][1]==1) {
 					b1->Text = "O";
 					checker = false;
 					b1->Enabled = false;
 				}
-				if (button3->Enabled == true && checker == true && button3->Enabled == true) {
+				if (button3->Enabled == true && checker == true && button3->Enabled == true && matrix[1][2]==1) {
 					button3->Text = "O";
 					checker = false;
 					button3->Enabled = false;
@@ -608,8 +1079,48 @@ namespace tictactoe {
 					button9->Enabled = false;
 				}
 
-
 			}
+			if (checker == true && b1->Text == "X" && button9->Text == "X")
+			{
+				if (button6->Enabled == true) {
+					button6->Text = "O";
+					button6->Enabled = false;
+					checker = false;
+				}
+			}
+
+			if (checker == true && button3->Text == "X" && button7->Text == "X")
+			{
+				if (button4->Enabled == true) {
+					button4->Text = "O";
+					button4->Enabled = false;
+					checker = false;
+				}
+			}
+
+
+			Random rnd;
+				int test;
+				int test2;
+				while (checker == true && draw<5)
+				{
+					test = rnd.Next(0, 2);
+					test2 = rnd.Next(0, 2);
+
+					if (matrix[test][test2] == 0) {
+						matrix[test][test2] = 10;
+						fill_matrixO(matrix);
+
+					}
+				}
+
+				if (draw ==  5 && label5->Text=="Tic Tac Toe") {
+					label5->BackColor = System::Drawing::Color::Yellow;
+					label5->Text = "Draw";
+					Enable_False();
+
+
+				}
 
 
 			//if (checker == true && button7->Text == "X" && button9->Text =="X") {
@@ -633,6 +1144,7 @@ private: System::Void b1_Click(System::Object^ sender, System::EventArgs^ e) {
 		b1->Text = "X";
 		checker = true;
 		b1->Enabled = false;
+		draw++;
 		AI();
 	}
 }
@@ -641,7 +1153,8 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	{
 		button2->Text = "X";
 		checker = true;
-		button2->Enabled = false;
+		button2->Enabled = false; 
+		draw++;
 		AI();
 	}
 }
@@ -651,6 +1164,7 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 		button3->Text = "X";
 		checker = true;
 		button3->Enabled = false;
+		draw++;
 		AI();
 	}	
 }
@@ -660,6 +1174,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 		button4->Text = "X";
 		checker = true;
 		button4->Enabled = false;
+		draw++;
 		AI();
 	}
 }
@@ -669,6 +1184,7 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 		button5->Text = "X";
 		checker = true;
 		button5->Enabled = false;
+		draw++;
 		AI();
 	}
 }
@@ -678,6 +1194,7 @@ private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e
 		button6->Text = "X";
 		checker = true;
 		button6->Enabled = false;
+		draw++;
 		AI();
 	}
 }
@@ -687,6 +1204,7 @@ private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e
 		button7->Text = "X";
 		checker = true;
 		button7->Enabled = false;
+		draw++;
 		AI();
 	}
 }
@@ -696,6 +1214,7 @@ private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e
 		button8->Text = "X";
 		checker = true;
 		button8->Enabled = false;
+		draw++;
 		AI();
 	}
 }
@@ -705,9 +1224,27 @@ private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e
 		button9->Text = "X";
 		checker = true;
 		button9->Enabled = false;
+		draw++;
 		AI();
 	}
 }
 
+private: System::Void label5_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button10_Click(System::Object^ sender, System::EventArgs^ e) {
+	Reset();
+
+}
+private: System::Void button11_Click(System::Object^ sender, System::EventArgs^ e) {
+	Reset();
+	AIscore = 0;
+	playerscore = 0;
+	label3->Text = "0";
+	label4->Text = "0";
+}
+private: System::Void label4_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }
